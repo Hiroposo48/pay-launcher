@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pay">
+<title>決済ランチャー</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: -apple-system, 'Hiragino Sans', sans-serif;
+    background: #0a0a0a;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    padding-top: env(safe-area-inset-top, 2rem);
+    padding-bottom: env(safe-area-inset-bottom, 2rem);
+  }
+
+  h1 {
+    font-size: 13px;
+    font-weight: 400;
+    color: #555;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .grid {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 0.08em;
+    padding-left: 4px;
+    margin-top: 6px;
+    margin-bottom: 2px;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 14px 16px;
+    background: #161616;
+    border: 1px solid #222;
+    border-radius: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.12s, transform 0.1s;
+    -webkit-user-select: none;
+  }
+
+  .btn:active {
+    background: #1e1e1e;
+    transform: scale(0.97);
+  }
+
+  .icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.02em;
+  }
+
+  .info { flex: 1; }
+  .label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #f0f0f0;
+    line-height: 1.2;
+  }
+  .sub {
+    font-size: 11px;
+    color: #555;
+    margin-top: 3px;
+  }
+
+  .arrow {
+    color: #333;
+    font-size: 16px;
+  }
+
+  .divider {
+    height: 1px;
+    background: #1e1e1e;
+    margin: 6px 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>決済</h1>
+
+<div class="grid">
+
+  <div class="section-label">QRコード決済</div>
+
+  <a class="btn" href="paypay://launch">
+    <div class="icon" style="background:#e60012;">PP</div>
+    <div class="info">
+      <div class="label">PayPay</div>
+      <div class="sub">QRコードで支払う</div>
+    </div>
+    <span class="arrow">›</span>
+  </a>
+
+  <a class="btn" href="aupay://">
+    <div class="icon" style="background:#ea5504;">au</div>
+    <div class="info">
+      <div class="label">au PAY</div>
+      <div class="sub">QRコードで支払う</div>
+    </div>
+    <span class="arrow">›</span>
+  </a>
+
+  <div class="divider"></div>
+  <div class="section-label">タッチ決済 — Wallet</div>
+
+  <a class="btn" href="shoebox://">
+    <div class="icon" style="background:#003087; font-size:11px; letter-spacing:0.01em;">JCB</div>
+    <div class="info">
+      <div class="label">JCB</div>
+      <div class="sub">Walletを開く → スワイプで選択</div>
+    </div>
+    <span class="arrow">›</span>
+  </a>
+
+  <a class="btn" href="shoebox://">
+    <div class="icon" style="background:#00a040; font-size:11px;">VISA</div>
+    <div class="info">
+      <div class="label">三井住友 VISA</div>
+      <div class="sub">Walletを開く → スワイプで選択</div>
+    </div>
+    <span class="arrow">›</span>
+  </a>
+
+</div>
+
+</body>
+</html>
