@@ -18,21 +18,62 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem 1.5rem;
-    padding-top: env(safe-area-inset-top, 2rem);
-    padding-bottom: env(safe-area-inset-bottom, 2rem);
+    padding: env(safe-area-inset-top, 2rem) 1.5rem env(safe-area-inset-bottom, 2rem);
   }
 
-  h1 {
-    font-size: 13px;
+  .pin-screen {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .pin-title { font-size: 18px; font-weight: 500; color: #f0f0f0; text-align: center; }
+  .pin-sub { font-size: 13px; color: #555; text-align: center; margin-top: -1.5rem; }
+
+  .pin-dots { display: flex; gap: 16px; }
+
+  .pin-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 1.5px solid #444;
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .pin-dot.filled { background: #f0f0f0; border-color: #f0f0f0; }
+  .pin-dot.error { background: #e60012; border-color: #e60012; }
+
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .key {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #1c1c1e;
+    border: none;
+    color: #f0f0f0;
+    font-size: 22px;
     font-weight: 400;
-    color: #555;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
+    cursor: pointer;
+    transition: background 0.1s, transform 0.08s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+  .key:active { background: #2c2c2e; transform: scale(0.93); }
+  .key.empty { background: transparent; cursor: default; }
+  .key.del { font-size: 16px; color: #888; background: transparent; }
+  .key.del:active { background: #1c1c1e; }
 
-  .grid {
+  .pin-error { font-size: 13px; color: #e60012; text-align: center; min-height: 18px; }
+
+  .main-screen {
     width: 100%;
     max-width: 340px;
     display: flex;
@@ -40,79 +81,89 @@
     gap: 10px;
   }
 
+  .app-title {
+    font-size: 13px; font-weight: 400; color: #555;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 1rem; text-align: center;
+  }
+
   .section-label {
-    font-size: 11px;
-    color: #444;
+    font-size: 11px; color: #444;
     letter-spacing: 0.08em;
-    padding-left: 4px;
-    margin-top: 6px;
-    margin-bottom: 2px;
+    padding-left: 4px; margin-top: 6px; margin-bottom: 2px;
   }
 
   .btn {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
-    padding: 14px 16px;
-    background: #161616;
-    border: 1px solid #222;
-    border-radius: 16px;
-    cursor: pointer;
+    display: flex; align-items: center; gap: 16px;
+    width: 100%; padding: 14px 16px;
+    background: #161616; border: 1px solid #222;
+    border-radius: 16px; cursor: pointer;
     text-decoration: none;
     transition: background 0.12s, transform 0.1s;
     -webkit-user-select: none;
   }
-
-  .btn:active {
-    background: #1e1e1e;
-    transform: scale(0.97);
-  }
+  .btn:active { background: #1e1e1e; transform: scale(0.97); }
 
   .icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 13px;
-    font-weight: 700;
-    color: white;
-    letter-spacing: 0.02em;
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 13px; font-weight: 700; color: white;
   }
 
   .info { flex: 1; }
-  .label {
-    font-size: 16px;
-    font-weight: 500;
-    color: #f0f0f0;
-    line-height: 1.2;
-  }
-  .sub {
-    font-size: 11px;
-    color: #555;
-    margin-top: 3px;
-  }
+  .label { font-size: 16px; font-weight: 500; color: #f0f0f0; line-height: 1.2; }
+  .sub { font-size: 11px; color: #555; margin-top: 3px; }
+  .arrow { color: #333; font-size: 16px; }
+  .divider { height: 1px; background: #1e1e1e; margin: 6px 0; }
 
-  .arrow {
-    color: #333;
-    font-size: 16px;
+  .reset-btn {
+    margin-top: 1.5rem; font-size: 11px; color: #333;
+    background: none; border: none; cursor: pointer; text-align: center;
   }
+  .reset-btn:active { color: #555; }
 
-  .divider {
-    height: 1px;
-    background: #1e1e1e;
-    margin: 6px 0;
-  }
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<h1>決済</h1>
+<div class="pin-screen" id="setupScreen">
+  <div class="pin-title">PINを設定</div>
+  <p class="pin-sub">6桁の数字を入力してください</p>
+  <div class="pin-dots" id="setupDots">
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+  </div>
+  <div class="keypad" id="setupKeypad"></div>
+  <div class="pin-error" id="setupError"></div>
+</div>
 
-<div class="grid">
+<div class="pin-screen hidden" id="confirmScreen">
+  <div class="pin-title">PINを確認</div>
+  <p class="pin-sub">もう一度入力してください</p>
+  <div class="pin-dots" id="confirmDots">
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+  </div>
+  <div class="keypad" id="confirmKeypad"></div>
+  <div class="pin-error" id="confirmError"></div>
+</div>
+
+<div class="pin-screen hidden" id="lockScreen">
+  <div class="pin-title">PINを入力</div>
+  <div class="pin-dots" id="lockDots">
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+  </div>
+  <div class="keypad" id="lockKeypad"></div>
+  <div class="pin-error" id="lockError"></div>
+</div>
+
+<div class="main-screen hidden" id="mainScreen">
+  <p class="app-title">決済</p>
 
   <p class="section-label">QRコード決済</p>
 
@@ -138,7 +189,7 @@
   <p class="section-label">タッチ決済</p>
 
   <a class="btn" href="shoebox://">
-    <div class="icon" style="background:#1c1c1e; border: 1px solid #333;">
+    <div class="icon" style="background:#1c1c1e; border:1px solid #333;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <rect x="3" y="7" width="18" height="13" rx="2" stroke="#888" stroke-width="1.5"/>
         <path d="M3 11h18" stroke="#888" stroke-width="1.5"/>
@@ -151,7 +202,91 @@
     <span class="arrow">›</span>
   </a>
 
+  <button class="reset-btn" onclick="resetPin()">PINを変更</button>
 </div>
 
+<script>
+  const KEY = 'pay_pin';
+  let s = '', c = '', l = '';
+
+  function buildKeypad(id, onNum, onDel) {
+    const el = document.getElementById(id);
+    ['1','2','3','4','5','6','7','8','9','','0','⌫'].forEach(n => {
+      const btn = document.createElement('button');
+      if (n === '') { btn.className = 'key empty'; }
+      else if (n === '⌫') { btn.className = 'key del'; btn.textContent = n; btn.onclick = onDel; }
+      else { btn.className = 'key'; btn.textContent = n; btn.onclick = () => onNum(n); }
+      el.appendChild(btn);
+    });
+  }
+
+  function dots(id, val, err) {
+    document.getElementById(id).querySelectorAll('.pin-dot').forEach((d, i) => {
+      d.classList.toggle('filled', i < val.length);
+      d.classList.toggle('error', !!err);
+    });
+  }
+
+  function shake(dotsId, errId, msg, cb) {
+    dots(dotsId, '______', true);
+    document.getElementById(errId).textContent = msg;
+    setTimeout(() => {
+      dots(dotsId, '', false);
+      document.getElementById(errId).textContent = '';
+      if (cb) cb();
+    }, 800);
+  }
+
+  buildKeypad('setupKeypad', n => {
+    if (s.length >= 6) return;
+    s += n; dots('setupDots', s);
+    if (s.length === 6) setTimeout(() => {
+      document.getElementById('setupScreen').classList.add('hidden');
+      document.getElementById('confirmScreen').classList.remove('hidden');
+    }, 200);
+  }, () => { s = s.slice(0,-1); dots('setupDots', s); });
+
+  buildKeypad('confirmKeypad', n => {
+    if (c.length >= 6) return;
+    c += n; dots('confirmDots', c);
+    if (c.length === 6) {
+      if (c === s) { localStorage.setItem(KEY, s); showMain(); }
+      else shake('confirmDots', 'confirmError', 'PINが一致しません', () => {
+        c = ''; s = '';
+        document.getElementById('confirmScreen').classList.add('hidden');
+        document.getElementById('setupScreen').classList.remove('hidden');
+        dots('setupDots', '');
+      });
+    }
+  }, () => { c = c.slice(0,-1); dots('confirmDots', c); });
+
+  buildKeypad('lockKeypad', n => {
+    if (l.length >= 6) return;
+    l += n; dots('lockDots', l);
+    if (l.length === 6) {
+      if (l === localStorage.getItem(KEY)) showMain();
+      else shake('lockDots', 'lockError', 'PINが違います', () => { l = ''; });
+    }
+  }, () => { l = l.slice(0,-1); dots('lockDots', l); });
+
+  function showMain() {
+    ['setupScreen','confirmScreen','lockScreen'].forEach(id =>
+      document.getElementById(id).classList.add('hidden'));
+    document.getElementById('mainScreen').classList.remove('hidden');
+  }
+
+  function resetPin() {
+    localStorage.removeItem(KEY);
+    s = ''; c = ''; l = '';
+    dots('setupDots',''); dots('confirmDots',''); dots('lockDots','');
+    document.getElementById('mainScreen').classList.add('hidden');
+    document.getElementById('setupScreen').classList.remove('hidden');
+  }
+
+  if (localStorage.getItem(KEY)) {
+    document.getElementById('setupScreen').classList.add('hidden');
+    document.getElementById('lockScreen').classList.remove('hidden');
+  }
+</script>
 </body>
 </html>
